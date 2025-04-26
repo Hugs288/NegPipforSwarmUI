@@ -8,7 +8,7 @@ using SwarmUI.Utils;
 namespace SwarmExtensions.NegPip;
 
 // NOTE: Classname must match filename
-public class NegPipExtension : Extension
+public class NegPipforSwarmUI : Extension
 {
     // OnInit is called when the extension is loaded
     public override void OnInit()
