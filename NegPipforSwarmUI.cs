@@ -48,6 +48,6 @@ public class NegPipforSwarmUI : Extension
                 g.LoadingModel = [negPipNodeId, 0]; // Output 0 = MODEL
                 g.LoadingClip = [negPipNodeId, 1];  // Output 1 = CLIP
             }
-        }, priority: -45);
+        }, priority: -10);
     }
 }
