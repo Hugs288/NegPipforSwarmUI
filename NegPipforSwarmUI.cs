@@ -31,7 +31,8 @@ public class NegPipforSwarmUI : Extension
             Description: "Enable NegPip. Allows you to use negative weight in the positive prompt.",
             Default: "false",
             Group: T2IParamTypes.GroupSampling,
-            FeatureFlag: "negpip"
+            FeatureFlag: "negpip",
+            OrderPriority: 16
         ));
 
         // Add the step to the ComfyUI workflow generation process
