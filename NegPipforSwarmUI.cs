@@ -30,7 +30,7 @@ public class NegPipforSwarmUI : Extension
             Name: "Use NegPip",
             Description: "Enable NegPip. Allows you to use negative weight in the positive prompt.",
             Default: "true",
-            Group: negPipGroup,
+            Group: T2IParamTypes.GroupSampling,
             FeatureFlag: "negpip"
         ));
 
@@ -48,6 +48,6 @@ public class NegPipforSwarmUI : Extension
                 g.LoadingModel = [negPipNodeId, 0]; // Output 0 = MODEL
                 g.LoadingClip = [negPipNodeId, 1];  // Output 1 = CLIP
             }
-        }, priority: -10);
+        }, priority: -7);
     }
 }
