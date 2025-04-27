@@ -29,7 +29,7 @@ public class NegPipforSwarmUI : Extension
         T2IRegisteredParam<bool> useNegPipParam = T2IParamTypes.Register<bool>(new(
             Name: "Use NegPip",
             Description: "Enable NegPip. Allows you to use negative weight in the positive prompt.",
-            Default: "true",
+            Default: "false",
             Group: T2IParamTypes.GroupSampling,
             FeatureFlag: "negpip"
         ));
