@@ -24,15 +24,14 @@ public class NegPipforSwarmUI : Extension
 
         ComfyUIBackendExtension.NodeToFeatureMap["CLIPNegPip"] = "negpip";
 
-        T2IParamGroup negPipGroup = new("NegPip", Toggles: true, Open: false, IsAdvanced: false);
-
         T2IRegisteredParam<bool> useNegPipParam = T2IParamTypes.Register<bool>(new(
             Name: "Use NegPip",
             Description: "Enable NegPip. Allows you to use negative weight in the positive prompt.",
             Default: "false",
             Group: T2IParamTypes.GroupSampling,
             FeatureFlag: "negpip",
-            OrderPriority: 16
+            OrderPriority: 16,
+            IgnoreIf: "false"
         ));
 
         // Add the step to the ComfyUI workflow generation process
