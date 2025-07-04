@@ -37,9 +37,15 @@ public class NegPipforSwarmUI : Extension
         // Add the step to the ComfyUI workflow generation process
         WorkflowGenerator.AddModelGenStep(g =>
         {
-            if (g.UserInput.TryGet(useNegPipParam, out bool enabled) && enabled)
+            // NegPip functionality is determined by the base model's compatibility.
+            string baseCompatClass = g.CurrentCompatClass();
+            bool isCompatible = baseCompatClass is "stable-diffusion-v1" or "stable-diffusion-xl-v1"
+                || g.IsFlux()
+                || g.IsHunyuanVideo()
+                || g.IsHunyuanVideoI2V();
+
+            if (g.UserInput.TryGet(useNegPipParam, out bool enabled) && enabled && isCompatible)
             {
-                Logs.Verbose("[NegPip] Applying CLIPNegPip node during model generation step.");
                 string negPipNodeId = g.CreateNode("CLIPNegPip", new JObject()
                 {
                     ["model"] = g.LoadingModel, // Use g.LoadingModel
@@ -47,6 +53,10 @@ public class NegPipforSwarmUI : Extension
                 });
                 g.LoadingModel = [negPipNodeId, 0]; // Output 0 = MODEL
                 g.LoadingClip = [negPipNodeId, 1];  // Output 1 = CLIP
+            }
+            else
+            {
+                Logs.Debug($"[NegPip] NegPip disabled as model '{g.FinalLoadedModel?.Name}' (class '{baseCompatClass}') is not in the compatible list (SD1, SDXL, Flux, Hunyuan).");
             }
         }, priority: -7);
     }
