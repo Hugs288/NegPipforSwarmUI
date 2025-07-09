@@ -26,7 +26,7 @@ public class NegPipforSwarmUI : Extension
 
         T2IRegisteredParam<bool> useNegPipParam = T2IParamTypes.Register<bool>(new(
             Name: "Use NegPip",
-            Description: "Enable NegPip. Allows you to use negative weight in the positive prompt.",
+            Description: "Enable NegPip. Allows you to use negative weight in the positive prompt.\nOnly supports SD1, SDXL, Flux, HunyuanVideo and HunyuanVideoI2V.\nNunchaku is not supported.",
             Default: "false",
             Group: T2IParamTypes.GroupSampling,
             FeatureFlag: "negpip",
@@ -44,7 +44,8 @@ public class NegPipforSwarmUI : Extension
                 || g.IsHunyuanVideo()
                 || g.IsHunyuanVideoI2V();
 
-            if (g.UserInput.TryGet(useNegPipParam, out bool enabled) && enabled && isCompatible)
+            string specialFormat = g.FinalLoadedModel?.Metadata?.SpecialFormat;
+            if (g.UserInput.TryGet(useNegPipParam, out bool enabled) && enabled && isCompatible && specialFormat is not "nunchaku" or "nunchaku-fp4")
             {
                 string negPipNodeId = g.CreateNode("CLIPNegPip", new JObject()
                 {
