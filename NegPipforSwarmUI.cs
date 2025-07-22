@@ -39,13 +39,15 @@ public class NegPipforSwarmUI : Extension
         {
             // NegPip functionality is determined by the base model's compatibility.
             string baseCompatClass = g.CurrentCompatClass();
+            string specialFormat = g.FinalLoadedModel?.Metadata?.SpecialFormat;
             bool isCompatible = baseCompatClass is "stable-diffusion-v1" or "stable-diffusion-xl-v1"
                 || g.IsFlux()
                 || g.IsHunyuanVideo()
-                || g.IsHunyuanVideoI2V();
+                || g.IsHunyuanVideoI2V()
+                && specialFormat != "nunchaku"
+                && specialFormat != "nunchaku-fp4";
 
-            string specialFormat = g.FinalLoadedModel?.Metadata?.SpecialFormat;
-            if (g.UserInput.TryGet(useNegPipParam, out bool enabled) && enabled && isCompatible && specialFormat is not "nunchaku" or "nunchaku-fp4")
+            if (g.UserInput.TryGet(useNegPipParam, out bool enabled) && enabled && isCompatible)
             {
                 string negPipNodeId = g.CreateNode("CLIPNegPip", new JObject()
                 {
@@ -57,7 +59,7 @@ public class NegPipforSwarmUI : Extension
             }
             else
             {
-                Logs.Debug($"[NegPip] NegPip disabled as model '{g.FinalLoadedModel?.Name}' (class '{baseCompatClass}') is not in the compatible list (SD1, SDXL, Flux, Hunyuan).");
+                Logs.Debug($"[NegPip] NegPip disabled as model '{g.FinalLoadedModel?.Name}' (class '{baseCompatClass}') is not in the compatible list (SD1, SDXL, Flux, HunyuanVideo).");
             }
         }, priority: -7);
     }
