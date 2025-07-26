@@ -47,19 +47,22 @@ public class NegPipforSwarmUI : Extension
                 && specialFormat != "nunchaku"
                 && specialFormat != "nunchaku-fp4";
 
-            if (g.UserInput.TryGet(useNegPipParam, out bool enabled) && enabled && isCompatible)
+            if (g.UserInput.TryGet(useNegPipParam, out bool enabled) && enabled)
             {
-                string negPipNodeId = g.CreateNode("CLIPNegPip", new JObject()
+                if (isCompatible)
                 {
-                    ["model"] = g.LoadingModel, // Use g.LoadingModel
-                    ["clip"] = g.LoadingClip   // Use g.LoadingClip
-                });
-                g.LoadingModel = [negPipNodeId, 0]; // Output 0 = MODEL
-                g.LoadingClip = [negPipNodeId, 1];  // Output 1 = CLIP
-            }
-            else
-            {
-                Logs.Debug($"[NegPip] NegPip disabled as model '{g.FinalLoadedModel?.Name}' (class '{baseCompatClass}') is not in the compatible list (SD1, SDXL, Flux, HunyuanVideo).");
+                    string negPipNodeId = g.CreateNode("CLIPNegPip", new JObject()
+                    {
+                        ["model"] = g.LoadingModel, // Use g.LoadingModel
+                        ["clip"] = g.LoadingClip   // Use g.LoadingClip
+                    });
+                    g.LoadingModel = [negPipNodeId, 0]; // Output 0 = MODEL
+                    g.LoadingClip = [negPipNodeId, 1];  // Output 1 = CLIP
+                }
+                else
+                {
+                    Logs.Debug($"[NegPip] NegPip disabled as model '{g.FinalLoadedModel?.Name}' (class '{baseCompatClass}') is not in the compatible list (SD1, SDXL, Flux, HunyuanVideo).");
+                }
             }
         }, priority: -7);
     }
