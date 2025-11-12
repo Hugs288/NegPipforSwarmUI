@@ -40,13 +40,8 @@ public class NegPipforSwarmUI : Extension
             // NegPip functionality is determined by the base model's compatibility.
             string baseCompatClass = g.CurrentCompatClass();
             string specialFormat = g.FinalLoadedModel?.Metadata?.SpecialFormat;
-            bool isCompatible = baseCompatClass is "stable-diffusion-v1" or "stable-diffusion-xl-v1"
-                || g.IsFlux()
-                || g.IsHunyuanVideo()
-                || g.IsHunyuanVideoI2V()
-                && specialFormat != "nunchaku"
-                && specialFormat != "nunchaku-fp4";
-
+            bool isCompatible = g.CurrentCompatClass() is "stable-diffusion-v1" or "stable-diffusion-xl-v1" or "hunyuan-video" or "hunyuan-video-i2v" or "hunyuan-video-i2v-v2" || g.CurrentCompatClass().StartsWith("flux-1")
+            && specialFormat is not "nunchaku" or "nunchaku-fp4";
             if (g.UserInput.TryGet(useNegPipParam, out bool enabled) && enabled)
             {
                 if (isCompatible)
