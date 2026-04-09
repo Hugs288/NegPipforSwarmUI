@@ -26,7 +26,7 @@ public class NegPipforSwarmUI : Extension
 
         T2IRegisteredParam<bool> useNegPipParam = T2IParamTypes.Register<bool>(new(
             Name: "Use NegPip",
-            Description: "Enable NegPip. Allows you to use negative weight in the positive prompt.\nOnly supports SD1, SDXL, Flux, HunyuanVideo and HunyuanVideoI2V.\nNunchaku is not supported.",
+            Description: "Enable NegPip. Allows you to use negative weight in the positive prompt.\nOnly supports SD1, SDXL, Flux, Anima, HunyuanVideo and HunyuanVideoI2V.\nNunchaku is not supported.",
             Default: "false",
             Group: T2IParamTypes.GroupSampling,
             FeatureFlag: "negpip",
@@ -40,7 +40,7 @@ public class NegPipforSwarmUI : Extension
             // NegPip functionality is determined by the base model's compatibility.
             string baseCompatClass = g.CurrentCompatClass();
             string specialFormat = g.FinalLoadedModel?.Metadata?.SpecialFormat;
-            bool isCompatible = g.CurrentCompatClass() is "stable-diffusion-v1" or "stable-diffusion-xl-v1" or "hunyuan-video" or "hunyuan-video-i2v" or "hunyuan-video-i2v-v2" || g.CurrentCompatClass().StartsWith("flux-1")
+            bool isCompatible = g.CurrentCompatClass() is "stable-diffusion-v1" or "stable-diffusion-xl-v1" or "anima" or "hunyuan-video" or "hunyuan-video-i2v" or "hunyuan-video-i2v-v2" || g.CurrentCompatClass().StartsWith("flux-1")
             && specialFormat is not "nunchaku" or "nunchaku-fp4";
             if (g.UserInput.TryGet(useNegPipParam, out bool enabled) && enabled)
             {
@@ -56,7 +56,7 @@ public class NegPipforSwarmUI : Extension
                 }
                 else
                 {
-                    Logs.Debug($"[NegPip] NegPip disabled as model '{g.FinalLoadedModel?.Name}' (class '{baseCompatClass}') is not in the compatible list (SD1, SDXL, Flux, HunyuanVideo).");
+                    Logs.Debug($"[NegPip] NegPip disabled as model '{g.FinalLoadedModel?.Name}' (class '{baseCompatClass}') is not in the compatible list (SD1, SDXL, Flux, Anima, HunyuanVideo).");
                 }
             }
         }, priority: -7);
